@@ -1,65 +1,140 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from 'react'
+import axios from 'axios'
 
 class SmurfForm extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       name: '',
       age: '',
       height: '',
-    };
+      id: ''
+    }
   }
 
-  addSmurf = event => {
-    event.preventDefault();
+  handleInputChange = event => {
+    this.setState({ [event.target.name]: event.target.value })
+  }
+
+  // addSmurf = event => {
+  // removed this and event.preventDefault() to allow page to render
+
+  addSmurf = () => {
     // add code to create the smurf using the api
-    const newSmurf = {
+
+    // create smurf object to post
+    const addNewSmurf = {
       name: this.state.name,
       age: this.state.age,
-      height: this.state.height,
-    };
-    this.setState({
-      name: '',
-      age: '',
-      height: '',
-    });
-  };
+      height: this.state.height
+    }
 
-  handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
+    // POST smurf to API
+    axios
+      .post(`http://localhost:3333/smurfs`, addNewSmurf)
+      .then(response => {
+        console.log('reponse', response)
+        this.setState({
+          smurfs: response.data
+        })
+      })
+      .catch(err => {
+        console.log(`There was an error posting a new smurf`)
+      })
+  }
 
-  // create smurf object to post
+  // TODO
+  /*
+  // grab id to know which smurf to edit
+  editSmurf = id => {
+    // EDIT smurf
+    const updateSmurf = {
+      name: this.state.name,
+      age: this.state.age,
+      height: this.state.height
+    }
 
-  render() {
+    axios
+      .put(`http://localhost:3333/smurfs/${id}`, updateSmurf)
+      .then(response => {
+        console.log('reponse', response)
+        this.setState({
+          smurfs: response.data
+        })
+      })
+      .catch(err => {
+        console.log(`There was an error updating a smurf`)
+      })
+  }
+
+  deleteSmurf = id => {
+    // DELETE smurf
+    axios
+      .delete(`http://localhost:3333/smurfs/${id}`)
+      .then(response => {
+        console.log('reponse', response)
+        this.setState({
+          smurfs: response.data
+        })
+      })
+      .catch(err => {
+        console.log(`There was an error updating a smurf`)
+      })
+  }
+*/
+
+  // // REMOVE
+  // handleNameChange = event => {
+  //   this.setState({ [event.target.name]: event.target.value });
+  // };
+
+  // //
+  // handleAgeChange = event => {
+  //   this.setState({ [event.target.age]: event.target.value });
+  // };
+  // //
+  // handleHeightChange = event => {
+  //   this.setState({ [event.target.height]: event.target.value });
+  // };
+
+  render () {
     return (
-      <div className="SmurfForm">
-        {/* form to add a smurf */}
-        <form onSubmit={this.addSmurf}>
-          <input
-            onChange={this.handleInputChange}
-            placeholder="name"
-            value={this.state.name}
-            name="name"
-          />
-          <input
-            onChange={this.handleInputChange}
-            placeholder="age"
-            value={this.state.age}
-            name="age"
-          />
-          <input
-            onChange={this.handleInputChange}
-            placeholder="height"
-            value={this.state.height}
-            name="height"
-          />
-          <button type="submit">Add to the village</button>
-        </form>
+      <div>
+        <div className='SmurfForm'>
+          {/* form to add a smurf */}
+          <form onSubmit={this.addSmurf}>
+            <input
+              onChange={this.handleInputChange}
+              placeholder='name'
+              value={this.state.name}
+              name='name'
+            />
+            <input
+              onChange={this.handleInputChange}
+              placeholder='height'
+              value={this.state.height}
+              name='height'
+            />
+            <input
+              onChange={this.handleInputChange}
+              placeholder='age'
+              value={this.state.age}
+              name='age'
+            />
+            <button type='submit'>Add to the village</button>
+            <button onClick={this.addSmurf}>Add Smurf to the village</button>
+            {/* <button onClick={() => this.editSmurf(this.state.id)}>
+              Edit smurf
+            </button>
+            <button onClick={() => this.deleteSmurf(this.state.id)}>
+              Delete smurf
+            </button> */}
+
+          </form>
+        </div>
       </div>
-    );
+    )
   }
 }
 
-export default SmurfForm;
+export default SmurfForm
