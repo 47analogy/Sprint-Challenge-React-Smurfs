@@ -1,3 +1,5 @@
+Start here
+
 1.  Explain the differences between `client-side routing` and `server-side routing`.
 
 ##Server side - request is sent to a server and server compiles and sends data to the client, which renders a new page (browser refreshes - the whole page)
